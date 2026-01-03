@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; // J'ai retiré useNavigate
 import { getPatients } from "../api/patientApi";
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  // Charger les données au montage du composant
   useEffect(() => {
     fetchPatients();
   }, []);
