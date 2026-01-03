@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import PatientsPage from "./pages/PatientsPage";
 import AddPatientPage from "./pages/AddPatientPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 export default function App() {
@@ -14,9 +15,13 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
-        <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="/patients" element={<PatientsPage />} />
-        <Route path="/add-patient" element={<AddPatientPage />} />
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/welcome" element={<WelcomePage />} />
+          <Route path="/patients" element={<PatientsPage />} />
+          <Route path="/add-patient" element={<AddPatientPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
