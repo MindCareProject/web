@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
 
 // Fonction pour récupérer le token (à adapter selon où tu le stockes)
 const getAuthHeaders = () => {

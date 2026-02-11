@@ -1,5 +1,5 @@
 // src/api/sessions.js
-import api from './axios'; // 👈 On utilise notre instance configurée (qui connaît le bon Token)
+import api from './axios';
 
 export const apiSessions = {
     // Récupérer l'historique
