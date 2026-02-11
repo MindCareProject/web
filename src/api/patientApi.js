@@ -13,6 +13,7 @@ const getAuthHeaders = () => {
     }
     return { headers: { Authorization: `Bearer ${token}` } };
 };
+
 export const createPatient = async (patientData) => {
     // patientData = { username, email, password, first_name, last_name }
     const headers = getAuthHeaders();

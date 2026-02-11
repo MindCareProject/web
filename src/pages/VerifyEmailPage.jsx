@@ -6,7 +6,6 @@ export default function VerifyEmailPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Pre-fill email from navigation state if available
   const [email, setEmail] = useState(location.state?.email || "");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
@@ -18,15 +17,14 @@ export default function VerifyEmailPage() {
         email,
         code
       });
-      setMessage("✅ Votre email a été vérifié ! Redirection vers la connexion...");
+      setMessage(" Votre email a été vérifié ! Redirection vers la connexion...");
 
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         navigate("/login");
       }, 2000);
 
-    } catch (err) { // Added err parameter to catch block even if unused to follow standard practice or use it for debug
-      setMessage("❌ Code incorrect");
+    } catch (err) { 
+      setMessage(" Code incorrect");
     }
   };
 

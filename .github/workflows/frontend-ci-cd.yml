@@ -1,4 +1,4 @@
-name: Frontend CI - MindCare
+name: Frontend CI/CD - MindCare
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
+  # TEST & BUILD 
   test_frontend:
     name: Test & Build Frontend
     runs-on: ubuntu-latest
@@ -34,6 +35,28 @@ jobs:
       - name: Run tests (skipped)
         run: echo "No frontend tests to run."
 
-
       - name: Build
         run: npm run build
+
+  # DÉPLOIEMENT 
+  deploy_frontend:
+    name: Deploy to GCP
+    needs: test_frontend 
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' 
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}        
+          username: ${{ secrets.SSH_USER }}     
+          key: ${{ secrets.SSH_PRIVATE_KEY }}   
+          script: |
+            cd ~/mindcare/web
+            
+            git pull origin main
+            
+            cd ..
+            
+            sudo docker compose up -d --build front

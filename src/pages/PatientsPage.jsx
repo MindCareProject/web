@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // J'ai retiré useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import { getPatients } from "../api/patientApi";
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPatients();
@@ -23,9 +25,12 @@ export default function PatientsPage() {
     }
   };
 
-  // Petit utilitaire pour les initiales (Avatar)
   const getInitials = (first, last) => {
     return `${first?.charAt(0) || ""}${last?.charAt(0) || ""}`.toUpperCase();
+  };
+
+  const handleRowClick = (patientId) => {
+    navigate(`/patients/${patientId}`);
   };
 
   return (
@@ -39,7 +44,7 @@ export default function PatientsPage() {
         </div>
         <Link
           to="/add-patient"
-          className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center gap-2 font-medium"
+          className="bg-[#98EAD3] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#8EBAE3] hover:shadow-xl transition transform hover:-translate-y-0.5  transition-colors duration-500 ease-in-out transform active:scale-95flex items-center gap-2 font-medium"
         >
           <span>+</span> Ajouter un patient
         </Link>
@@ -96,7 +101,7 @@ export default function PatientsPage() {
                     <tr 
                       key={patient.id} 
                       className="hover:bg-blue-50/50 transition duration-150 group cursor-pointer"
-                      onClick={() => console.log("Aller vers le dossier du patient", patient.id)}
+                      onClick={() => handleRowClick(patient.id)}
                     >
                       <td className="p-6">
                         <div className="flex items-center gap-4">
