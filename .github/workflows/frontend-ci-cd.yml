@@ -54,9 +54,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}   
           script: |
             cd ~/mindcare/web
-            
+            git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/moslehSN/web.git
             git pull origin main
-            
+            echo "REACT_APP_API_URL=http://34.155.100.78:8000/api" > .env
             cd ..
             
             sudo docker compose up -d --build front
