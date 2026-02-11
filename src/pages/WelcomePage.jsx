@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
   const [email, setEmail] = useState("");
@@ -9,13 +9,6 @@ export default function WelcomePage() {
     const savedEmail = localStorage.getItem("email");
     setEmail(savedEmail || "Utilisateur");
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    navigate("/login");
-  };
 
   return (
     <div className="flex flex-col min-h-screen bg-blue-50">

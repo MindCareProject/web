@@ -9,7 +9,7 @@ const PatientTimeline = ({ patientId }) => {
     const today = new Date().toLocaleDateString('fr-FR', {
         weekday: 'long', day: 'numeric', month: 'long'
     });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (patientId) loadData();
     }, [patientId]);
