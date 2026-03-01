@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { apiSessions } from '../api/sessions'; 
 
 const PatientTimeline = ({ patientId }) => {
@@ -9,12 +9,9 @@ const PatientTimeline = ({ patientId }) => {
     const today = new Date().toLocaleDateString('fr-FR', {
         weekday: 'long', day: 'numeric', month: 'long'
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        if (patientId) loadData();
-    }, [patientId]);
 
-    const loadData = async () => {
+    // 1. On mémorise proprement la fonction avec useCallback
+    const loadData = useCallback(async () => {
         try {
             const data = await apiSessions.fetchByPatient(patientId);
             setSessions(data);
@@ -23,7 +20,14 @@ const PatientTimeline = ({ patientId }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [patientId]);
+
+    // 2. Le useEffect est maintenant parfaitement propre
+    useEffect(() => {
+        if (patientId) {
+            loadData();
+        }
+    }, [patientId, loadData]);
 
     const handleSave = async () => {
         if (!note.trim()) return;

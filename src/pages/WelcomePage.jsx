@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("email");
