@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import api from '../api/axios';
 
 export default function VerifyEmailPage() {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function VerifyEmailPage() {
   const verify = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:8000/api/auth/verify-email/", {
+      await api.post("/auth/verify-email/", {
         email,
         code
       });
