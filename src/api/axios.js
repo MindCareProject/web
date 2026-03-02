@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -10,10 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        // 👇 CORRECTION ICI : On utilise le nom exact vu dans ta capture d'écran
         const token = localStorage.getItem('accessToken'); 
-        
-        // Si ça ne marche pas, essaie : localStorage.getItem('token');
         
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
