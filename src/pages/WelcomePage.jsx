@@ -56,10 +56,7 @@ export default function WelcomePage() {
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#8EBAE3] to-[#98EAD3]"></div>
             
             {/* Avatar Style Timeline */}
-            <div className="flex justify-center mb-6 mt-4">
-              <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[#8EBAE3] to-[#98EAD3] p-1 shadow-lg shadow-[#8EBAE3]/20">
-                <div className="w-full h-full bg-white rounded-[1.8rem] flex items-center justify-center">
-              <div className="text-center mb-8">
+            <div className="text-center mb-8">
               <h2 className="text-xl font-black text-gray-800 capitalize">
                 Dr. {profile.firstName} {profile.lastName}
               </h2>
@@ -67,11 +64,6 @@ export default function WelcomePage() {
                 Psychologue Clinicien
               </p>
             </div>
-                </div>
-              </div>
-            </div>
-
-
 
             {/* Liste d'infos verticales style épuré */}
             <div className="space-y-4">
