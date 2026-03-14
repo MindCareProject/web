@@ -76,7 +76,7 @@ export default function LoginPage() {
           <form onSubmit={handleClassicLogin} className="w-full max-w-sm space-y-4">
             <input
               type="text"
-              placeholder="Nom d'utilisateur ou Email"
+              placeholder="Email"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-6 py-4 bg-[#F8FAFC] border-none rounded-2xl outline-none focus:ring-2 focus:ring-[#8EBAE3] font-medium text-gray-600 placeholder:text-gray-300 transition-all shadow-sm"
