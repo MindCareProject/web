@@ -19,3 +19,12 @@ export const verifyGoogleToken = async (idToken) => {
   const response = await axios.post(`${API_URL}/auth/verify-token/`, { id_token: idToken });
   return response.data;
 };
+
+// Mettre à jour le profil
+export const updateProfile = async (userData) => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.patch(`${API_URL}/auth/update-profile/`, userData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data;
+};
