@@ -28,3 +28,16 @@ export const updateProfile = async (userData) => {
   });
   return response.data;
 };
+
+// Récupérer les informations du profil connecté
+export const getUserProfile = async () => {
+  const token = localStorage.getItem("accessToken");
+  
+  if (!token) throw new Error("Aucun token trouvé");
+
+  const response = await axios.get(`${API_URL}/auth/profile/`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data;
+};
+
