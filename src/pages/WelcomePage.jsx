@@ -3,12 +3,7 @@ import { getUserProfile } from "../api/authApi";
 
 export default function WelcomePage() {
   const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    adeliNumber: "",
-    cabinetName: ""
+    firstName: "", lastName: "", email: "", phone: "", adeliNumber: "", cabinetName: ""
   });
   const [loading, setLoading] = useState(true);
 
@@ -18,81 +13,121 @@ export default function WelcomePage() {
         const data = await getUserProfile();
         setProfile(data);
       } catch (error) {
-        console.error("Erreur réseau ou token expiré :", error);
+        console.error("Erreur chargement :", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProfile();
   }, []);
 
   if (loading) {
-    return <div className="min-h-screen bg-slate-50 flex items-center justify-center">Chargement de votre espace...</div>;
+    return (
+      <div className="min-h-screen bg-[#FDFDFD] flex items-center justify-center">
+        <span className="text-[10px] font-black text-[#8EBAE3] uppercase tracking-[0.3em] animate-pulse">
+          Initialisation sécurisée...
+        </span>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center pt-16 px-4">
-      {/* En-tête de la page */}
-      <div className="w-full max-w-4xl mb-8 text-center">
-        <h1 className="text-4xl font-extrabold text-slate-800 mb-2">
-          Bienvenue sur <span className="text-blue-600">MindCare</span>
-        </h1>
-        <p className="text-lg text-slate-500">
-          Votre espace praticien est prêt.
-        </p>
+    <div className="min-h-screen bg-[#FDFDFD] p-8 md:p-12">
+      {/* --- HEADER --- */}
+      <div className="max-w-7xl mx-auto mb-12 flex justify-between items-end">
+        <div>
+          <h1 className="text-4xl font-black text-gray-800 tracking-tighter">Tableau de bord</h1>
+          <p className="text-[#8EBAE3] text-[10px] font-black uppercase tracking-[0.2em] mt-1">
+            Espace Praticien • MindCare v1.0
+          </p>
+        </div>
+        <div className="hidden md:block bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-50">
+            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Session active</span>
+            <div className="h-1.5 w-12 bg-[#98EAD3] rounded-full mt-1"></div>
+        </div>
       </div>
 
-      {/* Carte du profil */}
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        <div className="h-32 bg-gradient-to-r from-blue-400 to-teal-300"></div>
-        
-        <div className="px-8 pb-8 relative">
-          
-          <div className="absolute -top-16 left-8">
-            <div className="w-32 h-32 bg-white rounded-2xl p-2 shadow-md rotate-3 hover:rotate-0 transition-transform duration-300">
-              <div className="w-full h-full bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-4xl font-bold uppercase">
-                {profile.firstName ? profile.firstName.charAt(0) : "?"}
-                {profile.lastName ? profile.lastName.charAt(0) : "?"}
+        {/* --- COLONNE GAUCHE : PROFIL (4/12) --- */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-[#8EBAE3]/5 border border-gray-50 relative overflow-hidden">
+            {/* Petit accent de couleur en haut */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#8EBAE3] to-[#98EAD3]"></div>
+            
+            {/* Avatar Style Timeline */}
+            <div className="flex justify-center mb-6 mt-4">
+              <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[#8EBAE3] to-[#98EAD3] p-1 shadow-lg shadow-[#8EBAE3]/20">
+                <div className="w-full h-full bg-white rounded-[1.8rem] flex items-center justify-center">
+                  <span className="text-2xl font-black text-[#8EBAE3] uppercase">
+                    {profile.firstName?.charAt(0)}{profile.lastName?.charAt(0)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-20 sm:mt-4 sm:ml-40 mb-8 sm:mb-12">
-            <h2 className="text-3xl font-bold text-slate-800 capitalize">
-              Dr. {profile.firstName || "Prénom"} {profile.lastName || "Nom"}
-            </h2>
-            <p className="text-slate-500 font-medium mt-1">
-              Psychologue & Psychothérapeute
-            </p>
-          </div>
-
-          {/* Grille des informations professionnelles VRAIES */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Email de contact</p>
-              <p className="text-slate-700 font-medium text-lg">{profile.email || "—"}</p>
+            <div className="text-center mb-8">
+              <h2 className="text-xl font-black text-gray-800 capitalize">
+                Dr. {profile.firstName} {profile.lastName}
+              </h2>
+              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                Psychologue Clinicien
+              </p>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Téléphone</p>
-              <p className="text-slate-700 font-medium text-lg">{profile.phone || "Non renseigné"}</p>
+            {/* Liste d'infos verticales style épuré */}
+            <div className="space-y-4">
+              <div className="group">
+                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Email</p>
+                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
+                  {profile.email}
+                </div>
+              </div>
+
+              <div className="group">
+                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Numéro ADELI</p>
+                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
+                  {profile.adeliNumber || "Non renseigné"}
+                </div>
+              </div>
+
+              <div className="group">
+                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Téléphone</p>
+                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
+                  {profile.phone || "Non renseigné"}
+                </div>
+              </div>
+
+              <div className="group">
+                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Établissement</p>
+                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
+                  {profile.cabinetName || "Pratique Libérale"}
+                </div>
+              </div>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Numéro ADELI / RPPS</p>
-              <p className="text-slate-700 font-medium text-lg">{profile.adeliNumber || "Non renseigné"}</p>
-            </div>
-
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Lieu d'exercice</p>
-              <p className="text-slate-700 font-medium text-lg">{profile.cabinetName || "Non renseigné"}</p>
-            </div>
-
+            <button className="w-full mt-8 bg-[#8EBAE3] hover:bg-[#98EAD3] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md shadow-[#8EBAE3]/10 active:scale-95">
+              Éditer mes informations
+            </button>
           </div>
         </div>
+
+        {/* --- COLONNE DROITE : PLACEHOLDER POUR FUTURS ÉLÉMENTS (8/12) --- */}
+        <div className="lg:col-span-8">
+          <div className="h-full bg-[#F8FAFC] rounded-[3rem] border-2 border-dashed border-[#8EBAE3]/20 flex flex-col items-center justify-center p-12 text-center">
+            <div className="w-20 h-20 bg-white rounded-[2rem] shadow-sm flex items-center justify-center mb-6">
+                <span className="text-3xl">✨</span>
+            </div>
+            <h3 className="text-lg font-black text-gray-700 tracking-tight">Prêt pour votre prochaine séance ?</h3>
+            <p className="text-gray-400 text-xs font-medium max-w-xs mt-2 leading-relaxed">
+                Ici apparaîtront bientôt vos statistiques, vos derniers patients et vos rappels.
+            </p>
+            <button className="mt-8 border-2 border-[#8EBAE3] text-[#8EBAE3] px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#8EBAE3] hover:text-white transition-all">
+                Gérer mes patients
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
