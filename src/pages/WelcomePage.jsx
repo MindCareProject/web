@@ -59,14 +59,7 @@ export default function WelcomePage() {
             <div className="flex justify-center mb-6 mt-4">
               <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[#8EBAE3] to-[#98EAD3] p-1 shadow-lg shadow-[#8EBAE3]/20">
                 <div className="w-full h-full bg-white rounded-[1.8rem] flex items-center justify-center">
-                  <span className="text-2xl font-black text-[#8EBAE3] uppercase">
-                    {profile.firstName?.charAt(0)}{profile.lastName?.charAt(0)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center mb-8">
+              <div className="text-center mb-8">
               <h2 className="text-xl font-black text-gray-800 capitalize">
                 Dr. {profile.firstName} {profile.lastName}
               </h2>
@@ -74,6 +67,11 @@ export default function WelcomePage() {
                 Psychologue Clinicien
               </p>
             </div>
+                </div>
+              </div>
+            </div>
+
+
 
             {/* Liste d'infos verticales style épuré */}
             <div className="space-y-4">
@@ -106,9 +104,6 @@ export default function WelcomePage() {
               </div>
             </div>
 
-            <button className="w-full mt-8 bg-[#8EBAE3] hover:bg-[#98EAD3] text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md shadow-[#8EBAE3]/10 active:scale-95">
-              Éditer mes informations
-            </button>
           </div>
         </div>
 
