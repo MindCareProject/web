@@ -35,29 +35,76 @@
   to {
     transform: rotate(360deg);
   }
-}
-/* ==========================================
-   CUSTOMISATION MODERNE DU DATEPICKER
+}/* ==========================================
+   DATEPICKER SUR-MESURE MINDCARE
    ========================================== */
 
-.react-datepicker__day {
-  border-radius: 0.75rem !important; 
+/* 1. On cache la petite flèche grise moche au-dessus */
+.react-datepicker__triangle {
+  display: none !important;
 }
 
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background-color: #8EBAE3 !important; 
-  color: white !important; 
-  font-weight: 900 !important; 
+/* 2. Le conteneur principal : bords ultra ronds et ombre douce (comme tes cartes) */
+.react-datepicker {
+  border: none !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1) !important;
+  font-family: inherit !important;
+  padding: 0.5rem !important;
 }
 
-.react-datepicker__day--selected:hover {
-  background-color: #8EBAE3 !important;
-}
-
+/* 3. L'en-tête (Mois/Année) : fond blanc, propre et épuré */
 .react-datepicker__header {
+  background-color: white !important;
+  border-bottom: none !important;
   border-top-left-radius: 1.5rem !important;
   border-top-right-radius: 1.5rem !important;
-  border-bottom: none !important;
-  background-color: white !important; 
+  padding-top: 1rem !important;
+}
+
+/* 4. Les jours de la semaine (L, M, M, J...) */
+.react-datepicker__day-name {
+  color: #9ca3af !important; /* Gris clair */
+  font-weight: 800 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+}
+
+/* 5. Les cases des numéros : bien rondes avec animation au survol */
+.react-datepicker__day {
+  border-radius: 50% !important;
+  width: 2.2rem !important;
+  height: 2.2rem !important;
+  line-height: 2.2rem !important;
+  margin: 0.1rem !important;
+  color: #4b5563 !important; /* Gris foncé */
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 6. Survol d'un jour non sélectionné */
+.react-datepicker__day:hover {
+  background-color: #F8FAFC !important;
+  transform: scale(1.1);
+}
+
+/* 7. Le jour sélectionné (Ton Bleu Signature avec effet glow) */
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #8EBAE3 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(142, 186, 227, 0.4) !important;
+  font-weight: 900 !important;
+  transform: scale(1.05);
+}
+
+/* 8. Les petits selects (Mois/Année) pour qu'ils s'intègrent mieux */
+.react-datepicker__year-select, 
+.react-datepicker__month-select {
+  border-radius: 0.5rem !important;
+  border: 1px solid #f3f4f6 !important;
+  padding: 0.2rem !important;
+  color: #4b5563 !important;
+  font-weight: bold !important;
+  outline: none !important;
 }
