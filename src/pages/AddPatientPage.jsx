@@ -121,6 +121,7 @@ export default function AddPatientPage() {
                 showYearDropdown
                 scrollableYearDropdown
                 yearDropdownItemNumber={100}
+                dropdownMode="scroll"
                 maxDate={new Date()} // Empêche de choisir une date dans le futur
                 wrapperClassName="w-full" // Force le conteneur à prendre toute la largeur
                 className="w-full bg-[#F8FAFC] border-none rounded-2xl px-5 pt-7 pb-3 focus:ring-2 focus:ring-[#8EBAE3] font-medium text-gray-600 outline-none"

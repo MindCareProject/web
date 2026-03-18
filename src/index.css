@@ -43,47 +43,50 @@ code {
    DATEPICKER SUR-MESURE MINDCARE
    ========================================== */
 
-/* 1. On cache la petite flèche grise moche au-dessus */
-.react-datepicker__triangle {
-  display: none !important;
-}
+/* ==========================================
+   CORRECTIONS ALIGNEMENT ET MENU ANNÉES
+   ========================================== */
 
-/* 2. Le conteneur principal : bords ultra ronds et ombre douce (comme tes cartes) */
-.react-datepicker {
-  border: none !important;
-  border-radius: 1.5rem !important;
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1) !important;
-  font-family: inherit !important;
-  padding: 0.5rem !important;
-}
-
-/* 3. L'en-tête (Mois/Année) : fond blanc, propre et épuré */
-.react-datepicker__header {
-  background-color: white !important;
-  border-bottom: none !important;
-  border-top-left-radius: 1.5rem !important;
-  border-top-right-radius: 1.5rem !important;
-  padding-top: 1rem !important;
-}
-
-/* 4. Les jours de la semaine (L, M, M, J...) */
+/* 1. ALIGNEMENT PARFAIT : Les lettres doivent avoir la même taille que les jours */
 .react-datepicker__day-name {
-  color: #9ca3af !important; /* Gris clair */
+  width: 2.2rem !important;  /* Doit être identique à la largeur de .react-datepicker__day */
+  margin: 0.1rem !important; /* Doit être identique à la marge de .react-datepicker__day */
+  display: inline-block !important;
+  color: #9ca3af !important;
   font-weight: 800 !important;
   font-size: 0.75rem !important;
   text-transform: uppercase !important;
 }
 
-/* 5. Les cases des numéros : bien rondes avec animation au survol */
-.react-datepicker__day {
-  border-radius: 50% !important;
-  width: 2.2rem !important;
-  height: 2.2rem !important;
-  line-height: 2.2rem !important;
-  margin: 0.1rem !important;
-  color: #4b5563 !important; /* Gris foncé */
+/* 2. LE NOUVEAU MENU DES ANNÉES (Qui remplace celui du Mac) */
+.react-datepicker__year-dropdown {
+  background-color: white !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  padding: 0.5rem 0 !important;
+  margin-top: 0.5rem !important;
+}
+
+/* 3. Les années à l'intérieur du menu */
+.react-datepicker__year-option {
+  padding: 0.5rem !important;
+  color: #4b5563 !important;
   font-weight: 600 !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s !important;
+}
+
+/* 4. Au survol d'une année */
+.react-datepicker__year-option:hover {
+  background-color: #F8FAFC !important;
+  color: #8EBAE3 !important;
+}
+
+/* 5. L'année actuellement sélectionnée */
+.react-datepicker__year-option--selected_year {
+  background-color: #8EBAE3 !important;
+  color: white !important;
+  font-weight: 900 !important;
 }
 
 /* 6. Survol d'un jour non sélectionné */
