@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+/* ==========================================
+   CUSTOMISATION MODERNE DU DATEPICKER
+   ========================================== */
+
+.react-datepicker__day {
+  border-radius: 0.75rem !important; 
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #8EBAE3 !important; 
+  color: white !important; 
+  font-weight: 900 !important; 
+}
+
+.react-datepicker__day--selected:hover {
+  background-color: #8EBAE3 !important;
+}
+
+.react-datepicker__header {
+  border-top-left-radius: 1.5rem !important;
+  border-top-right-radius: 1.5rem !important;
+  border-bottom: none !important;
+  background-color: white !important; 
+}
