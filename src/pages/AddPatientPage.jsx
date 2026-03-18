@@ -113,20 +113,88 @@ export default function AddPatientPage() {
                 DATE DE NAISSANCE
               </label>
               <DatePicker
-                selected={formData.birth_date}
-                onChange={handleDateChange}
-                locale="fr"
-                dateFormat="dd/MM/yyyy"
-                placeholderText="jj/mm/aaaa"
-                showYearDropdown
-                scrollableYearDropdown
-                yearDropdownItemNumber={100}
-                dropdownMode="scroll"
-                maxDate={new Date()} // Empêche de choisir une date dans le futur
-                wrapperClassName="w-full" // Force le conteneur à prendre toute la largeur
-                className="w-full bg-[#F8FAFC] border-none rounded-2xl px-5 pt-7 pb-3 focus:ring-2 focus:ring-[#8EBAE3] font-medium text-gray-600 outline-none"
-                required
-              />
+              selected={formData.birth_date}
+              onChange={handleDateChange}
+              locale="fr"
+              dateFormat="dd/MM/yyyy"
+              placeholderText="jj/mm/aaaa"
+              maxDate={new Date()}
+              wrapperClassName="w-full"
+              className="w-full bg-[#F8FAFC] border-none rounded-2xl px-5 pt-7 pb-3 focus:ring-2 focus:ring-[#8EBAE3] font-medium text-gray-600 outline-none"
+              required
+              
+              renderCustomHeader={({
+                date,
+                changeYear,
+                changeMonth,
+                decreaseMonth,
+                increaseMonth,
+                prevMonthButtonDisabled,
+                nextMonthButtonDisabled,
+              }) => {
+                // On génère un tableau avec les 100 dernières années
+                const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
+                const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+                return (
+                  <div className="flex items-center justify-between px-4 py-2 bg-white rounded-t-[1.5rem]">
+                    
+                    {/* Bouton Mois Précédent */}
+                    <button
+                      type="button"
+                      onClick={decreaseMonth}
+                      disabled={prevMonthButtonDisabled}
+                      className="text-gray-400 hover:text-[#8EBAE3] transition-colors p-2"
+                    >
+                      {"<"}
+                    </button>
+
+                    {/* Zone de sélection (Mois et Année) */}
+                    <div className="flex gap-2">
+                      
+                      {/* Selecteur de Mois */}
+                      <select
+                        value={months[date.getMonth()]}
+                        onChange={({ target: { value } }) => changeMonth(months.indexOf(value))}
+                        className="bg-[#F8FAFC] text-[#8EBAE3] font-black text-xs py-1 px-2 rounded-lg outline-none cursor-pointer appearance-none text-center"
+                        style={{ WebkitAppearance: 'none' }}
+                      >
+                        {months.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Selecteur d'Année */}
+                      <select
+                        value={date.getFullYear()}
+                        onChange={({ target: { value } }) => changeYear(value)}
+                        className="bg-[#F8FAFC] text-[#8EBAE3] font-black text-xs py-1 px-2 rounded-lg outline-none cursor-pointer appearance-none text-center"
+                        style={{ WebkitAppearance: 'none' }}
+                      >
+                        {years.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Bouton Mois Suivant */}
+                    <button
+                      type="button"
+                      onClick={increaseMonth}
+                      disabled={nextMonthButtonDisabled}
+                      className="text-gray-400 hover:text-[#8EBAE3] transition-colors p-2"
+                    >
+                      {">"}
+                    </button>
+                    
+                  </div>
+                );
+              }}
+            />
             </div>
 
             <input
