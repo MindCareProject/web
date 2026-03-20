@@ -61,7 +61,7 @@ export default function WelcomePage() {
                 Dr. {profile.firstName} {profile.lastName}
               </h2>
               <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-                Psychologue Clinicien
+                Psychologue Clinicien .
               </p>
             </div>
 

@@ -86,7 +86,7 @@ export default function RegisterPage() {
             </div>
 
             {/* LIGNE 3 : NOM DU CABINET (Largeur totale) */}
-            <input type="text" name="cabinetName" placeholder="Nom du cabinet (ex: Cabinet de Psychologie)" onChange={handleChange} required className="w-full px-5 py-3 bg-[#F8FAFC] rounded-2xl text-sm outline-none focus:ring-2 focus:ring-[#8EBAE3]" />
+            <input type="text" name="cabinetName" placeholder="Nom du cabinet" onChange={handleChange} required className="w-full px-5 py-3 bg-[#F8FAFC] rounded-2xl text-sm outline-none focus:ring-2 focus:ring-[#8EBAE3]" />
 
             {/* LIGNE 4 : EMAIL */}
             <input type="email" name="email" placeholder="E-mail professionnel" onChange={handleChange} required className="w-full px-5 py-3 bg-[#F8FAFC] rounded-2xl text-sm outline-none focus:ring-2 focus:ring-[#8EBAE3]" />
