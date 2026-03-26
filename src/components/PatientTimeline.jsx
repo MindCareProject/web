@@ -97,7 +97,7 @@ const PatientTimeline = ({ patientId }) => {
                                 <span className="text-[9px] font-bold text-gray-400 italic">Dr. {session.psychologist_name}</span>
                             </div>
                             <div className="text-sm text-gray-600 leading-relaxed font-medium">
-                                {session.notes}
+                                {session.decrypted_notes}                           
                             </div>
                         </div>
                     </div>
