@@ -13,5 +13,17 @@ export const apiSessions = {
             notes: text
         });
         return response.data;
+    },
+
+    generateDraft: async (sessionId) => {
+        const response = await api.post(`/sessions/${sessionId}/generer-draft/`);
+        return response.data;
+    },
+
+    sendToPatient: async (draftId, question) => {
+        const response = await api.post(`/sessions/${draftId}/envoyer-patient/`, {
+            question: question
+        });
+        return response.data;
     }
 };
