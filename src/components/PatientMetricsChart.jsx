@@ -70,14 +70,18 @@ const PatientMetricsChart = ({ patientId }) => {
           Évolution Globale (Cliquez sur un point pour les détails)
         </h3>
         
-        <div className="h-72 w-full cursor-pointer">
+       <div className="h-72 w-full cursor-pointer">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={metrics} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
-                onClick={(state) => {
+            <LineChart 
+              data={metrics} 
+              margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+              // LE SEUL ONCLICK QUI DOIT EXISTER EST CELUI-CI :
+              onClick={(state) => {
                 if (state && state.activePayload && state.activePayload.length > 0) {
                   setSelectedSession(state.activePayload[0].payload);
                 }
-              }}>
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
               <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis domain={[0, 10]} stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
@@ -93,9 +97,7 @@ const PatientMetricsChart = ({ patientId }) => {
                 stroke="#ef4444" 
                 strokeWidth={3}
                 dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8, cursor: 'pointer' }}
-                // METTRE À JOUR LA SÉANCE SÉLECTIONNÉE AU CLIC
-                onClick={(e) => { if(e && e.payload) setSelectedSession(e.payload); }}
+                activeDot={{ r: 8 }}
               />
               <Line 
                 type="monotone" 
@@ -104,8 +106,7 @@ const PatientMetricsChart = ({ patientId }) => {
                 stroke="#3b82f6" 
                 strokeWidth={3}
                 dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8, cursor: 'pointer' }}
-                onClick={(e) => { if(e && e.payload) setSelectedSession(e.payload); }}
+                activeDot={{ r: 8 }}
               />
               <Line 
                 type="monotone" 
@@ -114,8 +115,7 @@ const PatientMetricsChart = ({ patientId }) => {
                 stroke="#10b981" 
                 strokeWidth={3}
                 dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8, cursor: 'pointer' }}
-                onClick={(e) => { if(e && e.payload) setSelectedSession(e.payload); }}
+                activeDot={{ r: 8 }}
               />
             </LineChart>
           </ResponsiveContainer>
