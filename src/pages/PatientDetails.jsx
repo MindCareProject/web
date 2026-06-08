@@ -27,6 +27,19 @@ const PatientDetails = () => {
         if (id) fetchPatient();
     }, [id]);
 
+    // Sauvegarder dans les patients récemment consultés
+    useEffect(() => {
+        if (patient && id) {
+            try {
+                const name = `${patient.first_name || ''} ${patient.last_name || ''}`.trim() || patient.username;
+                const stored = JSON.parse(localStorage.getItem("recentlyViewedPatients") || "[]");
+                const filtered = stored.filter((p) => p.id !== parseInt(id));
+                const updated = [{ id: parseInt(id), name, viewedAt: new Date().toISOString() }, ...filtered].slice(0, 5);
+                localStorage.setItem("recentlyViewedPatients", JSON.stringify(updated));
+            } catch { /* ignore */ }
+        }
+    }, [patient, id]);
+
     // Mise à jour des informations (Email, Adresse, Tel, Date)
     const handleUpdate = async () => {
         try {
@@ -59,7 +72,7 @@ const PatientDetails = () => {
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] p-4 md:p-8 rounded-xl">
+        <div className="min-h-screen bg-[#FDFDFD] p-4 md:p-8 rounded-2xl">
             
             {/* BARRE DE NAVIGATION HAUTE */}
             <div className="max-w-5xl mx-auto mb-8 flex items-center justify-between">

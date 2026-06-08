@@ -6,7 +6,7 @@ export default function PatientMetricsPage() {
   const { id } = useParams();
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 rounded-xl">
+    <div className="min-h-screen bg-gray-50 p-8 rounded-2xl">
       <div className="max-w-6xl mx-auto">
         
         <div className="flex items-center gap-4 mb-8">

@@ -36,3 +36,10 @@ export const getPatientMetrics = async (patientId) => {
     );
     return response.data;
 };
+export const getDashboard = async () => {
+    const response = await axios.get(
+        `${API_URL}/psy/dashboard/`,
+        getAuthHeaders()
+    );
+    return response.data;
+};
