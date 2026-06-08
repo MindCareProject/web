@@ -230,74 +230,67 @@ export default function WelcomePage() {
                   Actions Requises
                 </h3>
 
-                {/* Si pas d'actions */}
-                {dashboard.new_responses.length === 0 && dashboard.pending_drafts.length === 0 && (
+                {/* Si pas d'actions du tout */}
+                {dashboard.new_responses.length === 0 && dashboard.pending_drafts.length === 0 ? (
                   <div className="text-center py-8">
                     <div className="w-14 h-14 bg-[#F8FAFC] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                      <span className="text-2xl">☕</span>
                     </div>
                     <p className="text-xs font-bold text-gray-400">Tout est à jour. Aucune action en attente.</p>
                   </div>
+                ) : (
+                  <div className="space-y-3">
+                    
+                    {/* Liste individuelle des NOUVELLES RÉPONSES (limité aux 5 premières pour ne pas casser le design) */}
+                    {dashboard.new_responses.slice(0, 5).map((response, idx) => (
+                      <div 
+                        key={`resp-${idx}`}
+                        onClick={() => goToPatient(response.patient_id, response.patient_name)}
+                        className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 cursor-pointer hover:border-[#98EAD3] hover:shadow-sm transition-all duration-300 group"
+                      >
+                        <div className="w-10 h-10 bg-[#98EAD3]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#98EAD3] transition-colors">
+                          <span className="text-lg group-hover:scale-110 transition-transform">💬</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-black text-gray-800 truncate block">
+                            {response.patient_name}
+                          </span>
+                          <p className="text-[11px] text-gray-400 mt-0.5 truncate font-medium">
+                            A répondu à votre question le {response.answered_at}
+                          </p>
+                        </div>
+                        <div className="text-[#98EAD3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0 border border-[#98EAD3]/30 group-hover:bg-[#98EAD3] group-hover:text-white transition-all">
+                          Lire
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Liste individuelle des BROUILLONS EN ATTENTE */}
+                    {dashboard.pending_drafts.slice(0, 5).map((draft, idx) => (
+                      <div 
+                        key={`draft-${idx}`}
+                        onClick={() => goToPatient(draft.patient_id, draft.patient_name)}
+                        className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 cursor-pointer hover:border-[#8EBAE3] hover:shadow-sm transition-all duration-300 group"
+                      >
+                        <div className="w-10 h-10 bg-[#8EBAE3]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#8EBAE3] transition-colors">
+                          <span className="text-lg group-hover:scale-110 transition-transform">📝</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-black text-gray-800 truncate block">
+                            {draft.patient_name}
+                          </span>
+                          <p className="text-[11px] text-gray-400 mt-0.5 truncate font-medium">
+                            Suggestion IA en attente de validation ({draft.created_at})
+                          </p>
+                        </div>
+                        <div className="text-[#8EBAE3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0 border border-[#8EBAE3]/30 group-hover:bg-[#8EBAE3] group-hover:text-white transition-all">
+                          Valider
+                        </div>
+                      </div>
+                    ))}
+
+                  </div>
                 )}
-
-                <div className="space-y-3">
-                  {/* Nouveaux messages (réponses de patients) */}
-                  {dashboard.new_responses.length > 0 && (
-                    <div 
-                      onClick={() => {
-                        const first = dashboard.new_responses[0];
-                        goToPatient(first.patient_id, first.patient_name);
-                      }}
-                      className="flex items-center gap-4 p-4 bg-emerald-50 rounded-2xl border border-emerald-200 cursor-pointer hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-50 transition-all duration-300 group"
-                    >
-                      <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <span className="text-lg">💬</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-sm font-black text-gray-800">
-                          {dashboard.new_responses.length} {dashboard.new_responses.length > 1 ? 'nouvelles réponses' : 'nouvelle réponse'}
-                        </span>
-                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">
-                          {dashboard.new_responses.length === 1
-                            ? `${dashboard.new_responses[0].patient_name} a répondu à votre question.`
-                            : `${dashboard.new_responses[0].patient_name} et ${dashboard.new_responses.length - 1} autre${dashboard.new_responses.length > 2 ? 's' : ''}.`
-                          }
-                        </p>
-                      </div>
-                      <div className="bg-emerald-200/50 text-emerald-700 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0">
-                        Voir
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Brouillons en attente */}
-                  {dashboard.pending_drafts.length > 0 && (
-                    <div 
-                      onClick={() => {
-                        const first = dashboard.pending_drafts[0];
-                        goToPatient(first.patient_id, first.patient_name);
-                      }}
-                      className="flex items-center gap-4 p-4 bg-amber-50 rounded-2xl border border-amber-200 cursor-pointer hover:border-amber-300 hover:shadow-md hover:shadow-amber-50 transition-all duration-300 group"
-                    >
-                      <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                        <span className="text-lg">📝</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-sm font-black text-gray-800">
-                          {dashboard.pending_drafts.length} {dashboard.pending_drafts.length > 1 ? 'brouillons en attente' : 'brouillon en attente'}
-                        </span>
-                        <p className="text-[11px] text-gray-500 mt-0.5 truncate">
-                          {dashboard.pending_drafts.length === 1
-                            ? `Suggestion IA pour ${dashboard.pending_drafts[0].patient_name} à valider.`
-                            : `Vous avez ${dashboard.pending_drafts.length} suggestions IA à valider.`
-                          }
-                        </p>
-                      </div>
-                      <div className="bg-amber-200/50 text-amber-700 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0">
-                        Valider
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {/* ==========================================
