@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
@@ -31,6 +31,36 @@ const PatientMetricsChart = ({ patientId }) => {
 
     if (patientId) fetchMetrics();
   }, [patientId]);
+
+  // Ajouter un label unique pour les dates en doublon (ex: "08/06 #1", "08/06 #2")
+  const chartData = useMemo(() => {
+    if (!metrics || metrics.length === 0) return [];
+
+    // Compter combien de fois chaque date apparaît
+    const dateCounts = {};
+    metrics.forEach((m) => {
+      dateCounts[m.date] = (dateCounts[m.date] || 0) + 1;
+    });
+
+    // Ajouter un displayDate unique pour les doublons
+    const dateIndex = {};
+    return metrics.map((m) => {
+      dateIndex[m.date] = (dateIndex[m.date] || 0) + 1;
+      const isDuplicate = dateCounts[m.date] > 1;
+      return {
+        ...m,
+        displayDate: isDuplicate ? `${m.date} #${dateIndex[m.date]}` : m.date,
+      };
+    });
+  }, [metrics]);
+
+  // Mettre à jour selectedSession quand chartData change pour garder la cohérence
+  useEffect(() => {
+    if (selectedSession && chartData.length > 0) {
+      const updated = chartData.find((d) => d.id === selectedSession.id);
+      if (updated) setSelectedSession(updated);
+    }
+  }, [chartData]);
 
   // Formater les données pour le graphique Radar de la séance sélectionnée
   const getRadarData = () => {
@@ -73,14 +103,15 @@ const PatientMetricsChart = ({ patientId }) => {
        <div className="h-72 w-full cursor-pointer">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
-              data={metrics} 
+              data={chartData} 
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-              <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
+              <XAxis dataKey="displayDate" stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis domain={[0, 10]} stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
               <Tooltip 
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                labelFormatter={(label) => `Séance : ${label}`}
               />
               <Legend iconType="circle" wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
               
@@ -123,7 +154,7 @@ const PatientMetricsChart = ({ patientId }) => {
           {/* Le Radar Chart (Empreinte émotionnelle) */}
           <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 lg:col-span-1 flex flex-col items-center justify-center">
             <h4 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-4 w-full text-left">
-              Empreinte du {selectedSession.date}
+              Empreinte du {selectedSession.displayDate || selectedSession.date}
             </h4>
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
