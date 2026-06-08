@@ -31,5 +31,9 @@ export const apiSessions = {
             question: questionText
         });
         return response.data;
+    },
+    markResponseAsRead: async (entryId) => {
+        const response = await api.post(`/psy/responses/${entryId}/acknowledge/`);
+        return response.data;
     }
 };

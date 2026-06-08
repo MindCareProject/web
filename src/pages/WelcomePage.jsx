@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../api/authApi";
 import { getDashboard } from "../api/patientApi";
+import { apiSessions } from "../api/sessions";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -65,6 +66,24 @@ export default function WelcomePage() {
       localStorage.setItem("recentlyViewedPatients", JSON.stringify(updated));
     } catch { /* ignore */ }
     navigate(`/patients/${patientId}`);
+  };
+
+  // Fonction pour marquer une réponse comme lue
+  const handleMarkAsRead = async (e, entryId) => {
+    e.stopPropagation(); // Empêche de déclencher le onClick de la carte entière (goToPatient)
+    
+    // 1. Mise à jour "Optimiste" de l'UI (on l'enlève direct de l'écran pour la fluidité)
+    setDashboard(prev => ({
+      ...prev,
+      new_responses: prev.new_responses.filter(resp => resp.entry_id !== entryId)
+    }));
+
+    // 2. Appel au backend pour sauvegarder l'action en base de données
+    try {
+      await apiSessions.markResponseAsRead(entryId); 
+    } catch (error) {
+      console.error("Erreur lors de la validation :", error);
+    }
   };
 
   if (loading) {
@@ -251,6 +270,7 @@ export default function WelcomePage() {
                         <div className="w-10 h-10 bg-[#98EAD3]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#98EAD3] transition-colors">
                           <span className="text-lg group-hover:scale-110 transition-transform">💬</span>
                         </div>
+                        
                         <div className="flex-1 min-w-0">
                           <span className="text-sm font-black text-gray-800 truncate block">
                             {response.patient_name}
@@ -259,8 +279,22 @@ export default function WelcomePage() {
                             A répondu à votre question le {response.answered_at}
                           </p>
                         </div>
-                        <div className="text-[#98EAD3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0 border border-[#98EAD3]/30 group-hover:bg-[#98EAD3] group-hover:text-white transition-all">
-                          Lire
+
+                        {/* Zone des boutons d'action */}
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          {/* Bouton Marquer comme lu (Discret) */}
+                          <button 
+                            onClick={(e) => handleMarkAsRead(e, response.entry_id)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-300 hover:text-emerald-500 hover:bg-emerald-50 transition-all border border-transparent hover:border-emerald-200"
+                            title="Marquer comme traité"
+                          >
+                            ✓
+                          </button>
+                          
+                          {/* Bouton Lire (Principal) */}
+                          <button className="text-[#98EAD3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider border border-[#98EAD3]/30 group-hover:bg-[#98EAD3] group-hover:text-white transition-all">
+                            Lire
+                          </button>
                         </div>
                       </div>
                     ))}
