@@ -59,7 +59,7 @@ const PatientDetails = () => {
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] p-4 md:p-8">
+        <div className="min-h-screen bg-[#FDFDFD] p-4 md:p-8 rounded-xl">
             
             {/* BARRE DE NAVIGATION HAUTE */}
             <div className="max-w-5xl mx-auto mb-8 flex items-center justify-between">
