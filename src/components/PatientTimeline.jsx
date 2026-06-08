@@ -6,18 +6,22 @@ const SessionCard = ({ session, onUpdate }) => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [editedQuestion, setEditedQuestion] = useState(draft?.ai_question || "");
+    
+    const [isManualMode, setIsManualMode] = useState(false);
 
     useEffect(() => {
         setDraft(session.draft);
         setEditedQuestion(session.draft?.ai_question || "");
     }, [session.draft]);
 
+    // Fonction 1 : Génération IA classique
     const handleGenerate = async () => {
         setIsGenerating(true);
         try {
             const data = await apiSessions.generateDraft(session.id);
             setDraft({ id: data.draft_id, ai_question: data.question, is_sent_to_patient: false });
             setEditedQuestion(data.question);
+            setIsManualMode(false); // On s'assure de quitter le mode manuel
         } catch (error) {
             console.error("Erreur génération", error);
         } finally {
@@ -25,6 +29,7 @@ const SessionCard = ({ session, onUpdate }) => {
         }
     };
 
+    // Fonction 2 : Envoi d'un brouillon existant (IA modifiée ou non)
     const handleSend = async () => {
         setIsSending(true);
         try {
@@ -37,14 +42,31 @@ const SessionCard = ({ session, onUpdate }) => {
         }
     };
 
+    // Fonction 3 : Envoi direct d'une question manuelle (sans brouillon IA préalable)
+    const handleManualSend = async () => {
+        if (!editedQuestion.trim()) return;
+        setIsSending(true);
+        try {
+            await apiSessions.sendManualQuestion(session.id, editedQuestion);
+            setDraft({ 
+                is_sent_to_patient: true, 
+                ai_question: editedQuestion, 
+                is_answered: false 
+            });
+            setIsManualMode(false);
+        } catch (error) {
+            console.error("Erreur envoi manuel", error);
+        } finally {
+            setIsSending(false);
+        }
+    };
+
     return (
         <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-            {/* Point sur la ligne */}
             <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-[#FDFDFD] bg-white shadow-sm absolute left-0 md:left-1/2 md:-translate-x-1/2 z-10 group-hover:border-[#8EBAE3] transition-all duration-300">
                 <span className="text-[#8EBAE3] text-xs">●</span>
             </div>
             
-            {/* Carte de la note */}
             <div className="w-[calc(100%-3rem)] md:w-[45%] bg-white p-6 rounded-[2rem] shadow-sm border border-gray-50 group-hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-3">
                     <time className="text-[10px] font-black text-[#8EBAE3] uppercase tracking-widest">{session.date}</time>
@@ -54,37 +76,65 @@ const SessionCard = ({ session, onUpdate }) => {
                     {session.decrypted_notes}                           
                 </div>
 
-                {/* --- BLOC SUGGESTION IA --- */}
+                {/* --- BLOC SUGGESTION ET ENVOI --- */}
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
-                    {!draft && (
-                        <button 
-                            onClick={handleGenerate}
-                            disabled={isGenerating}
-                            className="w-full py-2 bg-gradient-to-r from-[#8EBAE3]/10 to-[#98EAD3]/10 text-[#8EBAE3] rounded-xl text-xs font-bold hover:bg-[#8EBAE3]/20 transition-colors disabled:opacity-50"
-                        >
-                            {isGenerating ? "Génération en cours..." : "✨ Générer une suggestion IA"}
-                        </button>
+                    
+                    {!draft && !isManualMode && (
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button 
+                                onClick={handleGenerate}
+                                disabled={isGenerating}
+                                className="flex-1 py-2 bg-gradient-to-r from-[#8EBAE3]/10 to-[#98EAD3]/10 text-[#8EBAE3] border border-[#8EBAE3]/20 rounded-xl text-xs font-bold hover:bg-[#8EBAE3]/20 transition-colors disabled:opacity-50"
+                            >
+                                {isGenerating ? "Génération..." : "Suggestion IA"}
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    setIsManualMode(true);
+                                    setEditedQuestion(""); // On vide le champ par sécurité
+                                }}
+                                className="flex-1 py-2 bg-gray-50 text-gray-500 border border-gray-200 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors"
+                            >
+                                Rédiger manuellement
+                            </button>
+                        </div>
                     )}
 
-                    {draft && !draft.is_sent_to_patient && (
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-gray-400 uppercase">Suggestion IA (Brouillon)</label>
+                    {/* ZONE DE TEXTE : Affichée si on a un brouillon non envoyé, OU si on a cliqué sur "Rédiger manuellement" */}
+                    {((draft && !draft.is_sent_to_patient) || isManualMode) && (
+                        <div className="space-y-3 animate-slide-up">
+                            <label className="text-[10px] font-black text-gray-400 uppercase">
+                                {isManualMode ? "Votre question pour le patient" : "Suggestion IA (Brouillon)"}
+                            </label>
                             <textarea 
                                 className="w-full bg-gray-50 border-none rounded-xl p-3 text-sm text-gray-700 focus:ring-2 focus:ring-[#8EBAE3]"
                                 value={editedQuestion}
                                 onChange={(e) => setEditedQuestion(e.target.value)}
                                 rows={3}
+                                placeholder="Posez une question ouverte pour inciter à la réflexion..."
+                                autoFocus={isManualMode}
                             />
-                            <button 
-                                onClick={handleSend}
-                                disabled={isSending}
-                                className="w-full py-2 bg-[#98EAD3] text-white rounded-xl text-xs font-bold shadow-md shadow-[#98EAD3]/30 hover:scale-[1.02] transition-transform disabled:opacity-50"
-                            >
-                                {isSending ? "Envoi..." : "Valider et Envoyer au patient"}
-                            </button>
+                            <div className="flex gap-2">
+                                {isManualMode && (
+                                    <button 
+                                        onClick={() => setIsManualMode(false)}
+                                        className="px-4 py-2 bg-gray-100 text-gray-500 rounded-xl text-xs font-bold hover:bg-gray-200 transition-colors"
+                                    >
+                                        Annuler
+                                    </button>
+                                )}
+                                <button 
+                                    onClick={isManualMode ? handleManualSend : handleSend}
+                                    disabled={isSending || !editedQuestion.trim()}
+                                    className="flex-1 py-2 bg-[#98EAD3] text-white rounded-xl text-xs font-bold shadow-md shadow-[#98EAD3]/30 hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                                >
+                                    {isSending ? "Envoi..." : "Valider et Envoyer au patient"}
+                                </button>
+                            </div>
                         </div>
                     )}
 
+                    {/* ÉTAT ENVOYÉ : Affiché quand tout est fini */}
                     {draft && draft.is_sent_to_patient && (
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
@@ -116,7 +166,6 @@ const PatientTimeline = ({ patientId }) => {
         weekday: 'long', day: 'numeric', month: 'long'
     });
 
-    // 1. On mémorise proprement la fonction avec useCallback
     const loadData = useCallback(async () => {
         try {
             const data = await apiSessions.fetchByPatient(patientId);
@@ -128,7 +177,6 @@ const PatientTimeline = ({ patientId }) => {
         }
     }, [patientId]);
 
-    // 2. Le useEffect est maintenant parfaitement propre
     useEffect(() => {
         if (patientId) {
             loadData();
@@ -148,7 +196,6 @@ const PatientTimeline = ({ patientId }) => {
 
     return (
         <div className="space-y-10">
-            {/* --- BLOC NOUVELLE SÉANCE --- */}
             <div className="bg-[#F8FAFC] p-6 rounded-[2rem] border border-dashed border-[#8EBAE3]/50">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-[10px] font-black text-[#8EBAE3] uppercase tracking-[0.2em]">Nouvelle Séance</h3>
@@ -175,7 +222,6 @@ const PatientTimeline = ({ patientId }) => {
                 </div>
             </div>
 
-            {/* --- DIVISEUR --- */}
             <div className="relative flex items-center justify-center">
                 <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-100"></div>
@@ -183,7 +229,6 @@ const PatientTimeline = ({ patientId }) => {
                 <span className="relative bg-[#FDFDFD] px-4 text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Historique Sécurisé</span>
             </div>
 
-            {/* --- LISTE DES SÉANCES (TIMELINE) --- */}
             <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-[#8EBAE3]/50 before:via-gray-100 before:to-transparent">
                 
                 {loading ? (

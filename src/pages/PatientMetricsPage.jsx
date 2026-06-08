@@ -17,12 +17,8 @@ export default function PatientMetricsPage() {
           >
             &larr; Retour aux patients
           </Link>
-          <h1 className="text-3xl font-bold text-gray-800">
-            Suivi Clinique du patient #{id}
-          </h1>
         </div>
 
-        {/* On appelle ton super composant graphique ici en lui passant l'ID */}
         <PatientMetricsChart patientId={id} />
 
       </div>

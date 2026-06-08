@@ -25,5 +25,11 @@ export const apiSessions = {
             question: question
         });
         return response.data;
+    },
+    sendManualQuestion: async (sessionId, questionText) => {
+        const response = await api.post(`/sessions/${sessionId}/manual-question/`, {
+            question: questionText
+        });
+        return response.data;
     }
 };
