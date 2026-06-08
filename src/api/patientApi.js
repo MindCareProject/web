@@ -29,3 +29,10 @@ export const getPatients = async () => {
     );
     return response.data;
 };
+export const getPatientMetrics = async (patientId) => {
+    const response = await axios.get(
+        `${API_URL}/psy/patients/${patientId}/metrics/`,
+        getAuthHeaders()
+    );
+    return response.data;
+};
