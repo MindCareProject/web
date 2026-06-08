@@ -75,12 +75,6 @@ const PatientMetricsChart = ({ patientId }) => {
             <LineChart 
               data={metrics} 
               margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
-              // LE SEUL ONCLICK QUI DOIT EXISTER EST CELUI-CI :
-              onClick={(state) => {
-                if (state && state.activePayload && state.activePayload.length > 0) {
-                  setSelectedSession(state.activePayload[0].payload);
-                }
-              }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
               <XAxis dataKey="date" stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
@@ -96,8 +90,8 @@ const PatientMetricsChart = ({ patientId }) => {
                 name="Anxiété" 
                 stroke="#ef4444" 
                 strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8 }}
+                dot={{ r: 5, strokeWidth: 2, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
+                activeDot={{ r: 8, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
               />
               <Line 
                 type="monotone" 
@@ -105,8 +99,8 @@ const PatientMetricsChart = ({ patientId }) => {
                 name="Fatigue" 
                 stroke="#3b82f6" 
                 strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8 }}
+                dot={{ r: 5, strokeWidth: 2, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
+                activeDot={{ r: 8, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
               />
               <Line 
                 type="monotone" 
@@ -114,8 +108,8 @@ const PatientMetricsChart = ({ patientId }) => {
                 name="Résilience" 
                 stroke="#10b981" 
                 strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 8 }}
+                dot={{ r: 5, strokeWidth: 2, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
+                activeDot={{ r: 8, cursor: 'pointer', onClick: (e, payload) => setSelectedSession(payload.payload) }}
               />
             </LineChart>
           </ResponsiveContainer>
