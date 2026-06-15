@@ -10,7 +10,7 @@ const Navbar = () => {
     
     // Si la route est /login, on ne charge pas le profil
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         if (token) {
             getUserProfile().then(data => setProfile(data)).catch(err => console.error("Erreur profil navbar:", err));
         }
