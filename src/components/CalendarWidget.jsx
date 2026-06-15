@@ -165,8 +165,8 @@ export default function CalendarWidget() {
           dateClick={handleDateClick}
           eventClick={handleEventClick}
           height="100%"
-          slotMinTime="08:00:00"
-          slotMaxTime="20:00:00"
+          slotMinTime="06:00:00"
+          slotMaxTime="23:00:00"
           allDaySlot={false}
           locale="fr"
           buttonText={{
