@@ -55,10 +55,10 @@ const PatientDetails = () => {
     const toggleStatus = async () => {
         try {
             const newStatus = !patient.is_active;
-            // On utilise PATCH pour ne modifier QUE le champ is_active
+            // Utilisation de PATCH pour ne modifier que le champ is_active
             const response = await api.patch(`/patients/${id}/`, { is_active: newStatus });
             setPatient(response.data);
-            // On met aussi à jour le formData pour rester synchronisé
+            // Mise à jour du formData pour synchronisation
             setFormData(prev => ({ ...prev, is_active: newStatus }));
         } catch (error) {
             console.error("Erreur lors du changement de statut", error);

@@ -14,14 +14,14 @@ const SessionCard = ({ session, onUpdate }) => {
         setEditedQuestion(session.draft?.ai_question || "");
     }, [session.draft]);
 
-    // Fonction 1 : Génération IA classique
+    // Génération de question assistée par l'IA
     const handleGenerate = async () => {
         setIsGenerating(true);
         try {
             const data = await apiSessions.generateDraft(session.id);
             setDraft({ id: data.draft_id, ai_question: data.question, is_sent_to_patient: false });
             setEditedQuestion(data.question);
-            setIsManualMode(false); // On s'assure de quitter le mode manuel
+            setIsManualMode(false);
         } catch (error) {
             console.error("Erreur génération", error);
         } finally {
@@ -29,7 +29,7 @@ const SessionCard = ({ session, onUpdate }) => {
         }
     };
 
-    // Fonction 2 : Envoi d'un brouillon existant (IA modifiée ou non)
+    // Envoi du brouillon au patient
     const handleSend = async () => {
         setIsSending(true);
         try {
@@ -42,7 +42,7 @@ const SessionCard = ({ session, onUpdate }) => {
         }
     };
 
-    // Fonction 3 : Envoi direct d'une question manuelle (sans brouillon IA préalable)
+    // Envoi direct d'une question rédigée manuellement
     const handleManualSend = async () => {
         if (!editedQuestion.trim()) return;
         setIsSending(true);
@@ -76,7 +76,7 @@ const SessionCard = ({ session, onUpdate }) => {
                     {session.decrypted_notes}                           
                 </div>
 
-                {/* --- BLOC SUGGESTION ET ENVOI --- */}
+                {/* Bloc suggestion et envoi */}
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
                     
                     {!draft && !isManualMode && (
@@ -91,7 +91,7 @@ const SessionCard = ({ session, onUpdate }) => {
                             <button 
                                 onClick={() => {
                                     setIsManualMode(true);
-                                    setEditedQuestion(""); // On vide le champ par sécurité
+                                    setEditedQuestion("");
                                 }}
                                 className="flex-1 py-2 bg-gray-50 text-gray-500 border border-gray-200 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors"
                             >
@@ -100,7 +100,7 @@ const SessionCard = ({ session, onUpdate }) => {
                         </div>
                     )}
 
-                    {/* ZONE DE TEXTE : Affichée si on a un brouillon non envoyé, OU si on a cliqué sur "Rédiger manuellement" */}
+                    {/* Zone de texte pour la question */}
                     {((draft && !draft.is_sent_to_patient) || isManualMode) && (
                         <div className="space-y-3 animate-slide-up">
                             <label className="text-[10px] font-black text-gray-400 uppercase">
@@ -134,7 +134,7 @@ const SessionCard = ({ session, onUpdate }) => {
                         </div>
                     )}
 
-                    {/* ÉTAT ENVOYÉ : Affiché quand tout est fini */}
+                    {/* État envoyé */}
                     {draft && draft.is_sent_to_patient && (
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">

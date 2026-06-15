@@ -16,7 +16,7 @@ export default function WelcomePage() {
   const [loading, setLoading] = useState(true);
   const [dashboardLoading, setDashboardLoading] = useState(true);
 
-  // Gestion des "récemment consultés" via localStorage
+  // Gestion de l'historique de consultation via localStorage
   const [recentlyViewed, setRecentlyViewed] = useState([]);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function WelcomePage() {
     fetchDashboard();
   }, []);
 
-  // Charger les patients récemment consultés depuis localStorage
+  // Chargement de l'historique depuis localStorage
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem("recentlyViewedPatients") || "[]");
@@ -57,9 +57,9 @@ export default function WelcomePage() {
     }
   }, []);
 
-  // Naviguer vers un patient et le sauvegarder dans les récemment consultés
+  // Navigation et mise à jour de l'historique
   const goToPatient = (patientId, patientName) => {
-    // Sauvegarder dans les récemment consultés
+    // Sauvegarde dans le localStorage
     try {
       const stored = JSON.parse(localStorage.getItem("recentlyViewedPatients") || "[]");
       const filtered = stored.filter((p) => p.id !== patientId);
@@ -69,17 +69,17 @@ export default function WelcomePage() {
     navigate(`/patients/${patientId}`);
   };
 
-  // Fonction pour marquer une réponse comme lue
+  // Validation de lecture d'une réponse
   const handleMarkAsRead = async (e, entryId) => {
-    e.stopPropagation(); // Empêche de déclencher le onClick de la carte entière (goToPatient)
+    e.stopPropagation();
     
-    // 1. Mise à jour "Optimiste" de l'UI (on l'enlève direct de l'écran pour la fluidité)
+    // 1. Mise à jour optimiste de l'interface
     setDashboard(prev => ({
       ...prev,
       new_responses: prev.new_responses.filter(resp => resp.entry_id !== entryId)
     }));
 
-    // 2. Appel au backend pour sauvegarder l'action en base de données
+    // 2. Persistance de l'action en base de données
     try {
       await apiSessions.markResponseAsRead(entryId); 
     } catch (error) {
