@@ -153,7 +153,7 @@ export default function CalendarWidget() {
         </div>
       </div>
 
-      <div className="h-[700px] calendar-container">
+      <div className="h-[720px] calendar-container">
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
           initialView="timeGridWeek"
@@ -166,7 +166,7 @@ export default function CalendarWidget() {
           dateClick={handleDateClick}
           eventClick={handleEventClick}
           height="100%"
-          slotMinTime="06:00:00"
+          slotMinTime="08:00:00"
           slotMaxTime="23:00:00"
           allDaySlot={false}
           locale="fr"
