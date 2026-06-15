@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../api/authApi";
 import { getDashboard } from "../api/patientApi";
 import { apiSessions } from "../api/sessions";
+import CalendarWidget from "../components/CalendarWidget";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -114,8 +115,8 @@ export default function WelcomePage() {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        {/* --- COLONNE GAUCHE : PROFIL (4/12) --- */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* --- COLONNE GAUCHE : PROFIL (3/12) --- */}
+        <div className="lg:col-span-3 space-y-6">
           <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-[#8EBAE3]/5 border border-gray-50 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#8EBAE3] to-[#98EAD3]"></div>
             
@@ -161,8 +162,8 @@ export default function WelcomePage() {
           </div>
         </div>
 
-        {/* --- COLONNE DROITE : DASHBOARD (8/12) --- */}
-        <div className="lg:col-span-8 space-y-6">
+        {/* --- COLONNE DROITE : DASHBOARD (9/12) --- */}
+        <div className="lg:col-span-9 space-y-6">
 
           {dashboardLoading ? (
             <div className="h-full bg-[#F8FAFC] rounded-[3rem] border border-gray-100 flex items-center justify-center p-12">
@@ -239,145 +240,9 @@ export default function WelcomePage() {
               )}
 
               {/* ==========================================
-                  2. ACTIONS REQUISES
+                  2. CALENDRIER ET PLANNING
                   ========================================== */}
-              <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#8EBAE3] to-[#98EAD3]"></div>
-                
-                <h3 className="text-[10px] font-black text-[#8EBAE3] uppercase tracking-[0.2em] mb-5 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-[#8EBAE3] rounded-full"></span>
-                  Actions Requises
-                </h3>
-
-                {/* Si pas d'actions du tout */}
-                {dashboard.new_responses.length === 0 && dashboard.pending_drafts.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="w-14 h-14 bg-[#F8FAFC] rounded-2xl flex items-center justify-center mx-auto mb-3">
-                      <span className="text-2xl">☕</span>
-                    </div>
-                    <p className="text-xs font-bold text-gray-400">Tout est à jour. Aucune action en attente.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    
-                    {/* Liste individuelle des NOUVELLES RÉPONSES (limité aux 5 premières pour ne pas casser le design) */}
-                    {dashboard.new_responses.slice(0, 5).map((response, idx) => (
-                      <div 
-                        key={`resp-${idx}`}
-                        onClick={() => goToPatient(response.patient_id, response.patient_name)}
-                        className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 cursor-pointer hover:border-[#98EAD3] hover:shadow-sm transition-all duration-300 group"
-                      >
-                        <div className="w-10 h-10 bg-[#98EAD3]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#98EAD3] transition-colors">
-                          <span className="text-lg group-hover:scale-110 transition-transform">💬</span>
-                        </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm font-black text-gray-800 truncate block">
-                            {response.patient_name}
-                          </span>
-                          <p className="text-[11px] text-gray-400 mt-0.5 truncate font-medium">
-                            A répondu à votre question le {response.answered_at}
-                          </p>
-                        </div>
-
-                        {/* Zone des boutons d'action */}
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          {/* Bouton Marquer comme lu (Discret) */}
-                          <button 
-                            onClick={(e) => handleMarkAsRead(e, response.entry_id)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-300 hover:text-emerald-500 hover:bg-emerald-50 transition-all border border-transparent hover:border-emerald-200"
-                            title="Marquer comme traité"
-                          >
-                            ✓
-                          </button>
-                          
-                          {/* Bouton Lire (Principal) */}
-                          <button className="text-[#98EAD3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider border border-[#98EAD3]/30 group-hover:bg-[#98EAD3] group-hover:text-white transition-all">
-                            Lire
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* Liste individuelle des BROUILLONS EN ATTENTE */}
-                    {dashboard.pending_drafts.slice(0, 5).map((draft, idx) => (
-                      <div 
-                        key={`draft-${idx}`}
-                        onClick={() => goToPatient(draft.patient_id, draft.patient_name)}
-                        className="flex items-center gap-4 p-3 bg-white rounded-2xl border border-gray-100 cursor-pointer hover:border-[#8EBAE3] hover:shadow-sm transition-all duration-300 group"
-                      >
-                        <div className="w-10 h-10 bg-[#8EBAE3]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#8EBAE3] transition-colors">
-                          <span className="text-lg group-hover:scale-110 transition-transform">📝</span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm font-black text-gray-800 truncate block">
-                            {draft.patient_name}
-                          </span>
-                          <p className="text-[11px] text-gray-400 mt-0.5 truncate font-medium">
-                            Suggestion IA en attente de validation ({draft.created_at})
-                          </p>
-                        </div>
-                        <div className="text-[#8EBAE3] text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-wider flex-shrink-0 border border-[#8EBAE3]/30 group-hover:bg-[#8EBAE3] group-hover:text-white transition-all">
-                          Valider
-                        </div>
-                      </div>
-                    ))}
-
-                  </div>
-                )}
-              </div>
-
-              {/* ==========================================
-                  3. RÉCEMMENT CONSULTÉS
-                  ========================================== */}
-              <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#98EAD3] to-[#8EBAE3]/50"></div>
-                
-                <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-[10px] font-black text-[#98EAD3] uppercase tracking-[0.2em] flex items-center gap-2">
-                    <span className="w-2 h-2 bg-[#98EAD3] rounded-full"></span>
-                    Récemment consultés
-                  </h3>
-                  <button 
-                    onClick={() => navigate('/patients')}
-                    className="text-[9px] font-black text-[#8EBAE3] uppercase tracking-widest hover:text-[#6fa3d4] transition-colors"
-                  >
-                    Voir tous →
-                  </button>
-                </div>
-
-                {recentlyViewed.length === 0 && dashboard.recent_patients.length === 0 ? (
-                  <div className="text-center py-6">
-                    <p className="text-xs font-bold text-gray-400">Aucun patient consulté récemment.</p>
-                    <button 
-                      onClick={() => navigate('/patients')}
-                      className="mt-4 border-2 border-[#8EBAE3] text-[#8EBAE3] px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#8EBAE3] hover:text-white transition-all"
-                    >
-                      Gérer mes patients
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-3">
-                    {/* On montre d'abord les récemment consultés (localStorage), sinon les patients récents du backend */}
-                    {(recentlyViewed.length > 0 ? recentlyViewed : dashboard.recent_patients.map(p => ({ id: p.id, name: p.name }))).slice(0, 5).map((patient, idx) => (
-                      <button
-                        key={patient.id || idx}
-                        onClick={() => goToPatient(patient.id, patient.name)}
-                        className="flex items-center gap-3 bg-[#F8FAFC] hover:bg-[#8EBAE3]/10 border border-gray-100 hover:border-[#8EBAE3]/30 px-4 py-3 rounded-2xl transition-all duration-300 group"
-                      >
-                        <div className="w-8 h-8 bg-gradient-to-br from-[#8EBAE3] to-[#98EAD3] rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow">
-                          <span className="text-white text-[10px] font-black">
-                            {(patient.name || "?").charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold text-gray-700 group-hover:text-[#8EBAE3] transition-colors whitespace-nowrap">
-                          {patient.name}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <CalendarWidget />
             </>
           )}
 
