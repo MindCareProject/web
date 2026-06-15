@@ -62,7 +62,7 @@ export default function PatientsPage() {
         <div className="mb-6">
           <input
             type="text"
-            placeholder="🔍 Rechercher un patient par nom..."
+            placeholder="Rechercher un patient par nom..."
             className="w-full md:w-1/3 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#98EAD3] shadow-sm transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -86,7 +86,6 @@ export default function PatientsPage() {
         {/* Liste vide (aucun patient ou recherche infructueuse) */}
         {!loading && !error && filteredPatients.length === 0 && (
           <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
-            <div className="text-6xl mb-4">{patients.length === 0 ? "📭" : "🕵️‍♂️"}</div>
             <h3 className="text-xl font-bold text-gray-800 mb-2">
               {patients.length === 0 ? "Aucun patient pour le moment" : "Aucun patient trouvé"}
             </h3>
@@ -163,7 +162,7 @@ export default function PatientsPage() {
                         <div className="flex justify-end items-center gap-4">
                           <button 
                             onClick={(e) => { e.stopPropagation(); navigate(`/patients/${patient.id}`); }}
-                            className="text-gray-400 hover:text-gray-700 font-medium text-sm transition-colors"
+                            className="bg-[#98EAD3]/10 text-[#5aba9e] border border-[#98EAD3]/30 hover:bg-[#98EAD3] hover:text-white px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-sm"
                           >
                             Dossier
                           </button>

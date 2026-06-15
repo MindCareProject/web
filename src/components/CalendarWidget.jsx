@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import Select from 'react-select';
 import { apiAppointments } from '../api/appointments';
 import { getPatients } from '../api/patientApi';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
@@ -188,17 +189,40 @@ export default function CalendarWidget() {
             <form onSubmit={handleCreateAppointment} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Patient</label>
-                <select 
-                  required
-                  value={formData.patient}
-                  onChange={(e) => setFormData({...formData, patient: e.target.value})}
-                  className="w-full bg-[#F8FAFC] border border-gray-100 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 outline-none focus:border-[#8EBAE3]"
-                >
-                  <option value="">Sélectionner un patient...</option>
-                  {patients.map(p => (
-                    <option key={p.id} value={p.id}>{p.first_name} {p.last_name}</option>
-                  ))}
-                </select>
+                <Select
+                  options={patients.map(p => ({ value: p.id, label: `${p.first_name} ${p.last_name}` }))}
+                  onChange={(option) => setFormData({...formData, patient: option ? option.value : ''})}
+                  placeholder="Rechercher un patient..."
+                  isClearable
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      backgroundColor: '#F8FAFC',
+                      borderColor: '#f3f4f6',
+                      borderRadius: '0.75rem',
+                      padding: '4px',
+                      fontSize: '0.875rem',
+                      fontWeight: '700',
+                      color: '#374151',
+                      boxShadow: 'none',
+                      '&:hover': { borderColor: '#8EBAE3' }
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      borderRadius: '0.75rem',
+                      overflow: 'hidden',
+                      fontSize: '0.875rem',
+                      fontWeight: '700'
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      backgroundColor: state.isFocused ? '#F8FAFC' : 'white',
+                      color: state.isSelected ? '#8EBAE3' : '#374151',
+                      cursor: 'pointer',
+                      '&:active': { backgroundColor: '#e2e8f0' }
+                    })
+                  }}
+                />
               </div>
 
               <div>
@@ -292,7 +316,7 @@ export default function CalendarWidget() {
 
                 <div>
                   <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <span className="text-lg">🧠</span> Analyse IA (Radar)
+                    Analyse IA (Radar)
                   </h4>
                   {selectedEvent.session?.metrics ? (
                     renderRadarChart(selectedEvent.session.metrics)
@@ -341,6 +365,10 @@ export default function CalendarWidget() {
           border-radius: 0.75rem !important;
           padding: 0.5rem 1rem !important;
           box-shadow: none !important;
+          margin-right: 0.5rem !important;
+        }
+        .calendar-container .fc-button:last-child {
+          margin-right: 0 !important;
         }
         .calendar-container .fc-col-header-cell {
           padding: 0.5rem 0;

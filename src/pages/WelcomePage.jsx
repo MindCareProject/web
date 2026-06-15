@@ -115,55 +115,8 @@ export default function WelcomePage() {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        {/* --- COLONNE GAUCHE : PROFIL (3/12) --- */}
-        <div className="lg:col-span-3 space-y-6">
-          <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-[#8EBAE3]/5 border border-gray-50 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#8EBAE3] to-[#98EAD3]"></div>
-            
-            <div className="text-center mb-8">
-              <h2 className="text-xl font-black text-gray-800 capitalize">
-                Dr. {profile.firstName} {profile.lastName}
-              </h2>
-              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-                Psychologue Clinicien .
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="group">
-                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Email</p>
-                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
-                  {profile.email}
-                </div>
-              </div>
-
-              <div className="group">
-                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Numéro ADELI</p>
-                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
-                  {profile.adeliNumber || "Non renseigné"}
-                </div>
-              </div>
-
-              <div className="group">
-                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Téléphone</p>
-                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
-                  {profile.phone || "Non renseigné"}
-                </div>
-              </div>
-
-              <div className="group">
-                <p className="text-[8px] font-black text-[#8EBAE3] uppercase tracking-widest mb-1 ml-2">Établissement</p>
-                <div className="bg-[#F8FAFC] p-4 rounded-2xl text-xs font-bold text-gray-600 border border-transparent group-hover:border-[#8EBAE3]/20 transition-all">
-                  {profile.cabinetName || "Pratique Libérale"}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* --- COLONNE DROITE : DASHBOARD (9/12) --- */}
-        <div className="lg:col-span-9 space-y-6">
+        {/* --- COLONNE UNIQUE : DASHBOARD (12/12) --- */}
+        <div className="lg:col-span-12 space-y-6">
 
           {dashboardLoading ? (
             <div className="h-full bg-[#F8FAFC] rounded-[3rem] border border-gray-100 flex items-center justify-center p-12">
@@ -198,10 +151,10 @@ export default function WelcomePage() {
                         `}
                       >
                         <div className={`
-                          w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110
-                          ${alert.is_urgent ? 'bg-red-100' : 'bg-orange-100'}
+                          w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110 font-bold
+                          ${alert.is_urgent ? 'bg-red-100 text-red-500' : 'bg-orange-100 text-orange-500'}
                         `}>
-                          <span className="text-lg">{alert.is_urgent ? '🚨' : '⚠️'}</span>
+                          <span className="text-lg">{alert.is_urgent ? '!' : '!'}</span>
                         </div>
                         
                         <div className="flex-1 min-w-0">
