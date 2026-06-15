@@ -104,7 +104,7 @@ export default function WelcomePage() {
         <div>
           <h1 className="text-4xl font-black text-gray-800 tracking-tighter">Tableau de bord</h1>
           <p className="text-[#8EBAE3] text-[10px] font-black uppercase tracking-[0.2em] mt-1">
-            Espace Praticien • MindCare v1.0
+            Espace Praticien
           </p>
         </div>
         <div className="hidden md:block bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-50">

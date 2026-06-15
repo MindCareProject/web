@@ -153,7 +153,7 @@ export default function CalendarWidget() {
         </div>
       </div>
 
-      <div className="h-[600px] overflow-hidden calendar-container">
+      <div className="h-[750px] calendar-container">
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
           initialView="timeGridWeek"
@@ -385,6 +385,18 @@ export default function CalendarWidget() {
           font-size: 0.7rem;
           font-weight: 700;
           box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .calendar-container .fc-timegrid-slot {
+          height: 3em !important;
+        }
+        .calendar-container .fc-event-main {
+          padding: 2px;
+          line-height: 1.4;
+          overflow: hidden;
+        }
+        .calendar-container .fc-event-title {
+          font-weight: 800 !important;
+          white-space: normal !important;
         }
       `}</style>
     </div>
