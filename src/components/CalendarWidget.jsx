@@ -153,7 +153,7 @@ export default function CalendarWidget() {
         </div>
       </div>
 
-      <div className="h-700px] calendar-container">
+      <div className="h-[700px] calendar-container">
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
           initialView="timeGridWeek"
