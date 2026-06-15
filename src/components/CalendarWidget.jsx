@@ -153,7 +153,7 @@ export default function CalendarWidget() {
         </div>
       </div>
 
-      <div className="h-[680px] calendar-container">
+      <div className="h-[700px] calendar-container">
         <FullCalendar
           plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
           initialView="timeGridWeek"
@@ -387,7 +387,7 @@ export default function CalendarWidget() {
           box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         .calendar-container .fc-timegrid-slot {
-          height: 2.2em !important;
+          height: 2em !important;
         }
         .calendar-container .fc-event-main {
           padding: 2px;
