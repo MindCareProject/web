@@ -2,13 +2,13 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
-// Inscription classique (avec toutes les infos du psy)
+// Inscription utilisateur (psychologue)
 export const registerUser = async (userData) => {
   const response = await axios.post(`${API_URL}/register/`, userData);
   return response.data;
 };
 
-// Connexion classique
+// Authentification utilisateur
 export const loginUser = async (username, password) => {
   const response = await axios.post(`${API_URL}/login/`, { username, password });
   return response.data;

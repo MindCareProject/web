@@ -6,6 +6,9 @@ export default function PatientsPage() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  // Nouveau state pour la barre de recherche
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,12 +32,14 @@ export default function PatientsPage() {
     return `${first?.charAt(0) || ""}${last?.charAt(0) || ""}`.toUpperCase();
   };
 
-  const handleRowClick = (patientId) => {
-    navigate(`/patients/${patientId}`);
-  };
+  // Filtrage dynamique des patients selon la recherche
+  const filteredPatients = patients.filter((patient) => {
+    const fullName = `${patient.first_name} ${patient.last_name}`.toLowerCase();
+    return fullName.includes(searchTerm.toLowerCase());
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8 rounded-2xl">
       
       {/* En-tête de la page */}
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -44,7 +49,7 @@ export default function PatientsPage() {
         </div>
         <Link
           to="/add-patient"
-          className="bg-[#98EAD3] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#8EBAE3] hover:shadow-xl transition transform hover:-translate-y-0.5  transition-colors duration-500 ease-in-out transform active:scale-95flex items-center gap-2 font-medium"
+          className="bg-[#98EAD3] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#8EBAE3] hover:shadow-xl transition-colors duration-500 ease-in-out transform active:scale-95 flex items-center gap-2 font-medium"
         >
           <span>+</span> Ajouter un patient
         </Link>
@@ -53,6 +58,17 @@ export default function PatientsPage() {
       {/* Contenu Principal */}
       <div className="max-w-6xl mx-auto">
         
+        {/* BARRE DE RECHERCHE */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Rechercher un patient par nom..."
+            className="w-full md:w-1/3 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#98EAD3] shadow-sm transition-all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
         {/* État de chargement */}
         {loading && (
           <div className="flex justify-center items-center h-64">
@@ -67,24 +83,28 @@ export default function PatientsPage() {
           </div>
         )}
 
-        {/* Liste vide */}
-        {!loading && !error && patients.length === 0 && (
+        {/* Liste vide (aucun patient ou recherche infructueuse) */}
+        {!loading && !error && filteredPatients.length === 0 && (
           <div className="bg-white rounded-2xl shadow-sm p-12 text-center border border-gray-100">
-            <div className="text-6xl mb-4">📭</div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Aucun patient pour le moment</h3>
-            <p className="text-gray-500 mb-6">Commencez par ajouter votre premier patient pour accéder au suivi.</p>
-            <Link
-              to="/add-patient"
-              className="text-blue-600 font-semibold hover:underline"
-            >
-              Créer un dossier patient &rarr;
-            </Link>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">
+              {patients.length === 0 ? "Aucun patient pour le moment" : "Aucun patient trouvé"}
+            </h3>
+            <p className="text-gray-500 mb-6">
+              {patients.length === 0 
+                ? "Commencez par ajouter votre premier patient pour accéder au suivi." 
+                : "Essayez de modifier votre recherche."}
+            </p>
+            {patients.length === 0 && (
+              <Link to="/add-patient" className="text-blue-600 font-semibold hover:underline">
+                Créer un dossier patient &rarr;
+              </Link>
+            )}
           </div>
         )}
 
         {/* Tableau des Patients */}
-        {!loading && patients.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-slide-up">
+        {!loading && filteredPatients.length > 0 && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -93,19 +113,18 @@ export default function PatientsPage() {
                     <th className="p-6 font-semibold">Email / Identifiant</th>
                     <th className="p-6 font-semibold">Date d'inscription</th>
                     <th className="p-6 font-semibold">Statut</th>
-                    <th className="p-6 font-semibold text-right">Action</th>
+                    <th className="p-6 font-semibold text-right">Actions rapides</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {patients.map((patient) => (
+                  {filteredPatients.map((patient) => (
                     <tr 
                       key={patient.id} 
-                      className="hover:bg-blue-50/50 transition duration-150 group cursor-pointer"
-                      onClick={() => handleRowClick(patient.id)}
+                      className="hover:bg-blue-50/50 transition duration-150 group"
                     >
-                      <td className="p-6">
+                      {/* On garde le clic sur la ligne entière pour le dossier principal */}
+                      <td className="p-6 cursor-pointer" onClick={() => navigate(`/patients/${patient.id}`)}>
                         <div className="flex items-center gap-4">
-                          {/* Avatar avec Initiales */}
                           <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm border border-blue-200">
                             {getInitials(patient.first_name, patient.last_name) || "P"}
                           </div>
@@ -118,7 +137,7 @@ export default function PatientsPage() {
                         </div>
                       </td>
                       
-                      <td className="p-6">
+                      <td className="p-6 cursor-pointer" onClick={() => navigate(`/patients/${patient.id}`)}>
                         <p className="text-gray-700 text-sm">{patient.email}</p>
                         <p className="text-xs text-gray-400">@{patient.username}</p>
                       </td>
@@ -140,9 +159,20 @@ export default function PatientsPage() {
                       </td>
 
                       <td className="p-6 text-right">
-                        <button className="text-gray-400 hover:text-blue-600 group-hover:translate-x-1 transition transform font-medium text-sm">
-                          Ouvrir &rarr;
-                        </button>
+                        <div className="flex justify-end items-center gap-4">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); navigate(`/patients/${patient.id}`); }}
+                            className="bg-[#98EAD3]/10 text-[#5aba9e] border border-[#98EAD3]/30 hover:bg-[#98EAD3] hover:text-white px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-sm"
+                          >
+                            Dossier
+                          </button>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); navigate(`/patients/${patient.id}/metrics`); }}
+                            className="bg-[#8EBAE3]/10 text-[#8EBAE3] border border-[#8EBAE3]/30 hover:bg-[#8EBAE3] hover:text-white px-4 py-2 rounded-lg font-bold text-sm transition-all shadow-sm"
+                          >
+                            Graphiques
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

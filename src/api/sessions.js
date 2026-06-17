@@ -13,5 +13,27 @@ export const apiSessions = {
             notes: text
         });
         return response.data;
+    },
+
+    generateDraft: async (sessionId) => {
+        const response = await api.post(`/sessions/${sessionId}/generer-draft/`);
+        return response.data;
+    },
+
+    sendToPatient: async (draftId, question) => {
+        const response = await api.post(`/sessions/${draftId}/envoyer-patient/`, {
+            question: question
+        });
+        return response.data;
+    },
+    sendManualQuestion: async (sessionId, questionText) => {
+        const response = await api.post(`/sessions/${sessionId}/manual-question/`, {
+            question: questionText
+        });
+        return response.data;
+    },
+    markResponseAsRead: async (entryId) => {
+        const response = await api.post(`/psy/responses/${entryId}/acknowledge/`);
+        return response.data;
     }
 };

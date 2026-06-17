@@ -9,17 +9,17 @@ import Layout from "./components/Layout";
 import RegisterPage from './pages/RegisterPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import CompleteProfilePage from './pages/CompleteProfilePage';
-
+import PatientMetricsPage from './pages/PatientMetricsPage';
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 🔓 ROUTES PUBLIQUES (Accessibles sans être connecté) */}
+        {/* ROUTES PUBLIQUES (Accessibles sans être connecté) */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
 
-        {/* 🔒 ROUTES PROTÉGÉES (Nécessitent une connexion) */}
+        {/* ROUTES PROTÉGÉES (Nécessitent une connexion) */}
         <Route element={<ProtectedRoute />}>
           {/* Cette page est entre les deux : accessible seulement après Google Login mais avant le tableau de bord */}
           <Route path="/complete-profile" element={<CompleteProfilePage />} />
@@ -29,6 +29,7 @@ export default function App() {
             <Route path="/patients" element={<PatientsPage />} />
             <Route path="/add-patient" element={<AddPatientPage />} />
             <Route path="/patients/:id" element={<PatientDetails />} />
+            <Route path="/patients/:id/metrics" element={<PatientMetricsPage />} />
           </Route>
         </Route>
 
